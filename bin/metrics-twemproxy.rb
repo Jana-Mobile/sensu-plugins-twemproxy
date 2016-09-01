@@ -82,7 +82,8 @@ class Twemproxy2Graphite < Sensu::Plugin::Metric::CLI::Graphite
         data[pool_key].each do |key, value|
           if value.is_a?(Hash)
             value.each do |key_server, value_server|
-              output "#{config[:scheme]}.#{key}.#{key_server}", value_server
+              mangled_key = key.gsub ".", "_"
+              output "#{config[:scheme]}.#{mangled_key}.#{key_server}", value_server
             end
           else
             output "#{config[:scheme]}.#{key}", value
