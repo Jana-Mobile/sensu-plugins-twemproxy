@@ -75,6 +75,10 @@ class Twemproxy2Graphite < Sensu::Plugin::Metric::CLI::Graphite
       pools = data.keys - SKIP_ROOT_KEYS
 
       pools.each do |pool_key|
+        if not data[pool_key].is_a?(Hash)
+          output "#{config[:scheme]}.#{pool_key}", data[pool_key]
+          next
+        end
         data[pool_key].each do |key, value|
           if value.is_a?(Hash)
             value.each do |key_server, value_server|
